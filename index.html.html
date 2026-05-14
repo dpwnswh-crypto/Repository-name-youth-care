@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청소년 후속 케어 시스템</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        pretendard: ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'system-ui', 'sans-serif'],
+      },
+      colors: {
+        bg: '#FAF9F6',
+        cream: '#F2EFE9',
+        ink: '#2D2A26',
+        muted: '#6B6560',
+        sage: '#7C9885',
+        sageLight: '#A8C0A1',
+        sageDark: '#5A7964',
+        warn: '#D4915E',
+        danger: '#C45B4F',
+        soft: '#EBE5DC',
+      },
+    },
+  },
+}
+</script>
+<style>
+  body { font-family: 'Pretendard Variable', Pretendard, sans-serif; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .nav-item { transition: all 0.15s ease; }
+  .nav-item:hover { background: rgba(124, 152, 133, 0.08); }
+  .nav-item.active { background: rgba(124, 152, 133, 0.15); color: #5A7964; font-weight: 600; }
+  .nav-item.active .nav-icon { color: #5A7964; }
+  .card { background: white; border: 1px solid #EBE5DC; border-radius: 12px; }
+  .badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+  .btn-primary { background: #5A7964; color: white; padding: 10px 18px; border-radius: 8px; font-weight: 500; transition: background 0.15s; }
+  .btn-primary:hover { background: #4A6855; }
+  .btn-secondary { background: #EBE5DC; color: #2D2A26; padding: 10px 18px; border-radius: 8px; font-weight: 500; transition: background 0.15s; }
+  .btn-secondary:hover { background: #DDD5C8; }
+  .btn-ghost { color: #6B6560; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+  .btn-ghost:hover { background: #EBE5DC; color: #2D2A26; }
+  .input, .select, .textarea { width: 100%; padding: 10px 14px; border: 1px solid #DDD5C8; border-radius: 8px; background: white; font-size: 14px; transition: border 0.15s; }
+  .input:focus, .select:focus, .textarea:focus { outline: none; border-color: #7C9885; box-shadow: 0 0 0 3px rgba(124, 152, 133, 0.15); }
+  .label { font-size: 13px; font-weight: 500; color: #2D2A26; margin-bottom: 6px; display: block; }
+  .helper { font-size: 12px; color: #6B6560; margin-top: 4px; }
+  .section-title { font-size: 24px; font-weight: 700; color: #2D2A26; }
+  .section-subtitle { font-size: 14px; color: #6B6560; margin-top: 4px; }
+  .stat-card { background: white; border: 1px solid #EBE5DC; border-radius: 12px; padding: 20px; }
+  .stat-label { font-size: 13px; color: #6B6560; }
+  .stat-value { font-size: 28px; font-weight: 700; color: #2D2A26; margin-top: 8px; }
+  .table th { text-align: left; font-size: 12px; font-weight: 600; color: #6B6560; padding: 12px 16px; border-bottom: 1px solid #EBE5DC; text-transform: uppercase; letter-spacing: 0.05em; }
+  .table td { padding: 14px 16px; border-bottom: 1px solid #F2EFE9; font-size: 14px; }
+  .table tr:hover td { background: #FAF9F6; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; background: #EBE5DC; color: #2D2A26; }
+  .chip-sage { background: rgba(124, 152, 133, 0.15); color: #5A7964; }
+  .chip-warn { background: rgba(212, 145, 94, 0.15); color: #B5763E; }
+  .chip-danger { background: rgba(196, 91, 79, 0.15); color: #A4453A; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(45, 42, 38, 0.5); z-index: 50; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: white; border-radius: 16px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
+  .toggle { width: 40px; height: 22px; background: #DDD5C8; border-radius: 999px; position: relative; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+  .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: white; border-radius: 999px; transition: transform 0.15s; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+  .toggle.on { background: #7C9885; }
+  .toggle.on::after { transform: translateX(18px); }
+  .message-bubble { background: #FFEB3B20; border: 1px solid #FFD54F50; padding: 14px 16px; border-radius: 12px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; max-width: 320px; }
+  .message-bubble.kakao { background: #FEE500; color: #2D2A26; }
+  .calendar-day { aspect-ratio: 1; padding: 8px; border: 1px solid #EBE5DC; border-radius: 8px; font-size: 12px; min-height: 70px; }
+  .calendar-day.today { border-color: #7C9885; border-width: 2px; }
+  .calendar-day.event { background: rgba(124, 152, 133, 0.08); }
+  .pulse-dot { width: 8px; height: 8px; border-radius: 999px; background: #C45B4F; animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>
+</head>
+<body class="bg-bg text-ink min-h-screen">
+
+<div class="flex min-h-screen">
+  <!-- 사이드바 -->
+  <aside class="w-60 bg-cream border-r border-soft flex-shrink-0 hidden md:flex flex-col">
+    <div class="p-5 border-b border-soft">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-sage flex items-center justify-center text-white font-bold text-sm">CW</div>
+        <div>
+          <div class="text-sm font-semibold text-ink">Coworker</div>
+          <div class="text-xs text-muted">청소년 후속 케어</div>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+      <a href="#" data-section="dashboard" class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        대시보드
+      </a>
+      <a href="#" data-section="events" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        행사 설정
+      </a>
+      <a href="#" data-section="students" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        학생 관리
+      </a>
+      <a href="#" data-section="decisions" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        결단/나눔 기록
+      </a>
+      <a href="#" data-section="messages" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        메시지 생성
+      </a>
+      <a href="#" data-section="settings" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+        발송 설정
+      </a>
+      <a href="#" data-section="calendar" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        발송 캘린더
+      </a>
+      <a href="#" data-section="crisis" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        위기 모니터링
+        <span id="crisisBadge" class="ml-auto badge bg-danger/15 text-danger" style="display:none;">0</span>
+      </a>
+      <a href="#" data-section="logs" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer">
+        <svg class="nav-icon w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+        메시지 로그
+      </a>
+    </nav>
+    <div class="p-3 border-t border-soft">
+      <button onclick="exportData()" class="w-full text-xs text-muted hover:text-ink py-2 px-3 rounded-lg hover:bg-soft transition flex items-center gap-2 justify-center">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        데이터 백업
+      </button>
+    </div>
+  </aside>
+
+  <!-- 메인 콘텐츠 -->
+  <main class="flex-1 overflow-x-hidden">
+    <!-- 상단바 -->
+    <div class="sticky top-0 z-10 bg-bg/90 backdrop-blur border-b border-soft px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 id="topTitle" class="text-lg font-semibold">대시보드</h1>
+          <p id="topDate" class="text-xs text-muted"></p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="badge chip-sage">시연 모드</span>
+          <button onclick="loadSampleData()" class="btn-ghost text-xs">샘플 데이터 로드</button>
+          <button onclick="confirmReset()" class="btn-ghost text-xs text-danger">전체 초기화</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 콘텐츠 영역 -->
+    <div class="p-6 max-w-7xl mx-auto">
+
+      <!-- 대시보드 -->
+      <section id="section-dashboard" class="space-y-6">
+        <div>
+          <h2 class="section-title">대시보드</h2>
+          <p class="section-subtitle">전체 사역 현황을 한눈에</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="stat-card">
+            <div class="stat-label">등록 학생</div>
+            <div id="statStudents" class="stat-value">0</div>
+            <div class="text-xs text-muted mt-1">동의 완료 학생만</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">활성 결단</div>
+            <div id="statDecisions" class="stat-value">0</div>
+            <div class="text-xs text-muted mt-1">최근 수련회 기준</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">이번 주 발송</div>
+            <div id="statMessages" class="stat-value">0</div>
+            <div class="text-xs text-muted mt-1">예정 + 발송 완료</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">위기 신호</div>
+            <div id="statCrisis" class="stat-value">0</div>
+            <div class="text-xs text-muted mt-1">처리 대기 건</div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="card p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold">오늘의 발송 예정</h3>
+              <span class="text-xs text-muted" id="todayDate"></span>
+            </div>
+            <div id="todayPlanList" class="space-y-2">
+              <div class="text-sm text-muted py-8 text-center">아직 학생 정보가 없어요. 좌측 메뉴에서 학생을 등록해보세요.</div>
+            </div>
+          </div>
+
+          <div class="card p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold">신호등 (학생 상태)</h3>
+            </div>
+            <div id="signalList" class="space-y-3">
+              <div class="text-sm text-muted py-8 text-center">학생 등록 후 자동 집계됩니다.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <h3 class="font-semibold mb-3">최근 활동</h3>
+          <div id="recentActivity" class="space-y-2">
+            <div class="text-sm text-muted py-4">활동 내역이 없습니다.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 행사 설정 -->
+      <section id="section-events" class="hidden space-y-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="section-title">행사 설정</h2>
+            <p class="section-subtitle">수련회/캠프 등 행사 정보를 등록합니다</p>
+          </div>
+          <button onclick="openEventModal()" class="btn-primary text-sm">+ 새 행사 추가</button>
+        </div>
+
+        <div id="eventList" class="space-y-3">
+          <div class="card p-12 text-center">
+            <div class="text-muted text-sm">등록된 행사가 없습니다.</div>
+            <button onclick="openEventModal()" class="mt-4 btn-primary text-sm">첫 행사 등록하기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 학생 관리 -->
+      <section id="section-students" class="hidden space-y-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="section-title">학생 관리</h2>
+            <p class="section-subtitle">참가자 정보 및 학부모 동의 관리</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openStudentModal()" class="btn-primary text-sm">+ 학생 추가</button>
+          </div>
+        </div>
+
+        <div class="card overflow-hidden">
+          <table class="table w-full">
+            <thead class="bg-cream">
+              <tr>
+                <th>이름</th>
+                <th>학년</th>
+                <th>조</th>
+                <th>연락처</th>
+                <th>동의</th>
+                <th>상태</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="studentTableBody">
+              <tr><td colspan="7" class="text-center py-12 text-muted text-sm">등록된 학생이 없습니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 결단/나눔 기록 -->
+      <section id="section-decisions" class="hidden space-y-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="section-title">결단/조별 나눔 기록</h2>
+            <p class="section-subtitle">학생별 수련회 결단과 나눔을 입력합니다</p>
+          </div>
+          <button onclick="openDecisionModal()" class="btn-primary text-sm">+ 결단 추가</button>
+        </div>
+
+        <div class="card overflow-hidden">
+          <table class="table w-full">
+            <thead class="bg-cream">
+              <tr>
+                <th>학생</th>
+                <th>행사</th>
+                <th>카테고리</th>
+                <th>결단 내용</th>
+                <th>나눔 요약</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="decisionTableBody">
+              <tr><td colspan="6" class="text-center py-12 text-muted text-sm">기록된 결단이 없습니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 메시지 생성 -->
+      <section id="section-messages" class="hidden space-y-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="section-title">메시지 생성 미리보기</h2>
+            <p class="section-subtitle">학생을 선택하고 4가지 유형의 메시지를 즉시 생성/비교합니다</p>
+          </div>
+          <button onclick="renderMessages()" class="btn-ghost text-xs flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            학생 목록 새로고침
+          </button>
+        </div>
+
+        <div class="card p-5">
+          <div class="grid md:grid-cols-3 gap-4">
+            <div>
+              <label class="label">학생 선택</label>
+              <select id="msgStudent" class="select" onchange="generatePreview()">
+                <option value="">— 학생을 선택하세요 —</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">메시지 유형</label>
+              <select id="msgType" class="select" onchange="generatePreview()">
+                <option value="A">A형 — 일반 격려</option>
+                <option value="B">B형 — 말씀 묵상</option>
+                <option value="C">C형 — 점검 (5단계)</option>
+                <option value="D">D형 — 특별 시점</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">톤</label>
+              <select id="msgTone" class="select" onchange="generatePreview()">
+                <option value="warm">따뜻한 형/누나 (기본)</option>
+                <option value="insta">인스타 유행 톤</option>
+                <option value="enfp">잔잔 ENFP</option>
+                <option value="dry">건조 (부담 0%)</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-4">
+            <label class="label">메시지 패턴 (A형만 해당)</label>
+            <select id="msgPattern" class="select" onchange="generatePreview()">
+              <option value="P1">P1 — 회상-위로-제안 (기본)</option>
+              <option value="P2">P2 — 일상-연결</option>
+              <option value="P3">P3 — 관찰-공감</option>
+              <option value="P4">P4 — 짧은 한 마디 (저부담)</option>
+              <option value="P5">P5 — 결단 강화</option>
+              <option value="P6">P6 — 비유/이미지</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="card p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-semibold text-sm">미리보기 (카톡 화면)</h3>
+              <button onclick="generatePreview()" class="btn-ghost text-xs">↻ 다시 생성</button>
+            </div>
+            <div class="bg-cream rounded-lg p-4 min-h-[280px] flex flex-col gap-2">
+              <div id="msgPreview" class="message-bubble kakao text-left">
+                학생과 메시지 유형/톤을 선택하면 미리보기가 표시됩니다.
+              </div>
+              <div id="msgMeta" class="text-xs text-muted mt-1"></div>
+            </div>
+          </div>
+          <div class="card p-5">
+            <h3 class="font-semibold text-sm mb-3">메시지 분석</h3>
+            <div id="msgAnalysis" class="space-y-3 text-sm">
+              <div class="text-muted text-xs py-12 text-center">메시지 생성 후 분석 정보가 표시됩니다.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <h3 class="font-semibold text-sm mb-3">4가지 톤 동시 비교</h3>
+          <div id="toneComparison" class="grid md:grid-cols-4 gap-3">
+            <div class="text-muted text-xs col-span-4 py-8 text-center">학생 선택 시 4가지 톤 메시지가 동시에 표시됩니다.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 발송 설정 -->
+      <section id="section-settings" class="hidden space-y-6">
+        <div>
+          <h2 class="section-title">발송 설정</h2>
+          <p class="section-subtitle">메시지 톤, 발송 주기, 시점, 포함 내용을 정합니다</p>
+        </div>
+
+        <div class="card p-5 space-y-5">
+          <h3 class="font-semibold">기본 설정</h3>
+
+          <div>
+            <label class="label">기본 메시지 톤</label>
+            <select id="cfgTone" class="select" onchange="saveSettings()">
+              <option value="warm">따뜻한 형/누나 (기본 추천)</option>
+              <option value="insta">인스타 유행 톤</option>
+              <option value="enfp">잔잔 ENFP</option>
+              <option value="dry">건조 (부담 0%)</option>
+            </select>
+            <p class="helper">학생별 개별 톤은 학생 정보에서 별도 설정 가능</p>
+          </div>
+
+          <div>
+            <label class="label">발송 주기</label>
+            <select id="cfgFrequency" class="select" onchange="saveSettings()">
+              <option value="weekly1">주 1회</option>
+              <option value="weekly2" selected>주 2회 (추천)</option>
+              <option value="weekly3">주 3회</option>
+              <option value="biweekly">격주 1회</option>
+            </select>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="label">발송 시점 (요일)</label>
+              <div class="flex flex-wrap gap-2">
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-day="mon" class="cfg-day"> 월</label>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-day="tue" class="cfg-day"> 화</label>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-day="wed" class="cfg-day" checked> 수</label>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-day="thu" class="cfg-day"> 목</label>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-day="fri" class="cfg-day" checked> 금</label>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-day="sat" class="cfg-day"> 토</label>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-day="sun" class="cfg-day"> 일</label>
+              </div>
+            </div>
+            <div>
+              <label class="label">발송 시간대</label>
+              <select id="cfgTime" class="select" onchange="saveSettings()">
+                <option value="lunch">점심 (12:30)</option>
+                <option value="evening" selected>저녁 (19:00) — 추천</option>
+                <option value="morning">아침 (07:30)</option>
+              </select>
+              <p class="helper">⚠️ 카톡 친구톡은 20시 이후 발송 금지 (정통법)</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="label">발송 제외 시간대</label>
+            <div class="flex items-center gap-2 text-sm">
+              <input type="time" id="cfgExcludeStart" value="20:00" class="input flex-1" onchange="saveSettings()">
+              <span class="text-muted">~</span>
+              <input type="time" id="cfgExcludeEnd" value="08:00" class="input flex-1" onchange="saveSettings()">
+            </div>
+            <p class="helper">이 시간대엔 자동 발송 안 됨 (수동 발송도 차단)</p>
+          </div>
+
+          <div>
+            <label class="label">메시지 발송 기간</label>
+            <select id="cfgDuration" class="select" onchange="saveSettings()">
+              <option value="30">수련회 후 1개월</option>
+              <option value="90">수련회 후 3개월 (추천)</option>
+              <option value="180" selected>수련회 후 6개월</option>
+              <option value="365">수련회 후 1년</option>
+              <option value="forever">제한 없음</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card p-5 space-y-5">
+          <h3 class="font-semibold">메시지 유형별 활성화</h3>
+          <p class="helper -mt-3">어떤 유형의 메시지를 발송할지 선택합니다</p>
+
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-3 py-2">
+              <div class="flex-1">
+                <div class="font-medium text-sm">A형 — 일반 격려</div>
+                <p class="text-xs text-muted mt-1">평상시 디폴트. 결단 회상 + 작은 격려. (주 1~2회)</p>
+              </div>
+              <div class="toggle on" data-toggle="useA" onclick="toggleSetting(this)"></div>
+            </div>
+            <div class="flex items-start justify-between gap-3 py-2 border-t border-soft pt-4">
+              <div class="flex-1">
+                <div class="font-medium text-sm">B형 — 말씀 묵상</div>
+                <p class="text-xs text-muted mt-1">개역개정 + 풀어쓰기 병행. 한 단어 응답 권장. (주 1회)</p>
+              </div>
+              <div class="toggle on" data-toggle="useB" onclick="toggleSetting(this)"></div>
+            </div>
+            <div class="flex items-start justify-between gap-3 py-2 border-t border-soft pt-4">
+              <div class="flex-1">
+                <div class="font-medium text-sm">C형 — 점검 (5단계)</div>
+                <p class="text-xs text-muted mt-1">"잘가고있어/그럭저럭/어려웠어/멀어진느낌/모르겠어" 5단계. (격주 1회)</p>
+              </div>
+              <div class="toggle on" data-toggle="useC" onclick="toggleSetting(this)"></div>
+            </div>
+            <div class="flex items-start justify-between gap-3 py-2 border-t border-soft pt-4">
+              <div class="flex-1">
+                <div class="font-medium text-sm">D형 — 특별 시점</div>
+                <p class="text-xs text-muted mt-1">절기/시험/생일/수련회 기념일 등. 자동 트리거.</p>
+              </div>
+              <div class="toggle on" data-toggle="useD" onclick="toggleSetting(this)"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-5 space-y-5">
+          <h3 class="font-semibold">응답 처리 옵션</h3>
+
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-3 py-2">
+              <div class="flex-1">
+                <div class="font-medium text-sm">학생 응답 받기</div>
+                <p class="text-xs text-muted mt-1">학생이 답장 보내면 자동으로 분류 후 후속 메시지 발송</p>
+              </div>
+              <div class="toggle on" data-toggle="receiveReply" onclick="toggleSetting(this)"></div>
+            </div>
+            <div class="flex items-start justify-between gap-3 py-2 border-t border-soft pt-4">
+              <div class="flex-1">
+                <div class="font-medium text-sm">실천 체크 기능</div>
+                <p class="text-xs text-muted mt-1">B형/C형에 "실천 했어요" 응답 옵션 추가 (단, 죄책감 자극 주의)</p>
+              </div>
+              <div class="toggle" data-toggle="practiceCheck" onclick="toggleSetting(this)"></div>
+            </div>
+            <div class="flex items-start justify-between gap-3 py-2 border-t border-soft pt-4">
+              <div class="flex-1">
+                <div class="font-medium text-sm">위기 신호 자동 감지</div>
+                <p class="text-xs text-muted mt-1">Lv4/3/2 키워드 감지 + Claude Haiku 2차 검증 후 교역자 알림</p>
+              </div>
+              <div class="toggle on" data-toggle="crisisDetect" onclick="toggleSetting(this)"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 발송 캘린더 -->
+      <section id="section-calendar" class="hidden space-y-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="section-title">발송 캘린더</h2>
+            <p class="section-subtitle">절기/학사일정/수련회기념일/개인시점이 자동 표시됩니다</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="changeMonth(-1)" class="btn-ghost">◀</button>
+            <span id="currentMonth" class="text-sm font-medium px-3"></span>
+            <button onclick="changeMonth(1)" class="btn-ghost">▶</button>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <div class="grid grid-cols-7 gap-2 mb-2">
+            <div class="text-xs font-medium text-center text-muted py-2">일</div>
+            <div class="text-xs font-medium text-center text-muted py-2">월</div>
+            <div class="text-xs font-medium text-center text-muted py-2">화</div>
+            <div class="text-xs font-medium text-center text-muted py-2">수</div>
+            <div class="text-xs font-medium text-center text-muted py-2">목</div>
+            <div class="text-xs font-medium text-center text-muted py-2">금</div>
+            <div class="text-xs font-medium text-center text-muted py-2">토</div>
+          </div>
+          <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
+        </div>
+
+        <div class="card p-5">
+          <h3 class="font-semibold text-sm mb-3">이벤트 범례</h3>
+          <div class="flex flex-wrap gap-3 text-xs">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-sage/20 border border-sage"></span> 절기/교회력</div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-warn/20 border border-warn"></span> 학사 일정</div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-blue-100 border border-blue-400"></span> 수련회 기념일</div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-pink-100 border border-pink-400"></span> 개인 시점 (생일 등)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 위기 모니터링 -->
+      <section id="section-crisis" class="hidden space-y-6">
+        <div>
+          <h2 class="section-title">위기 모니터링</h2>
+          <p class="section-subtitle">위험 신호 등급별 학생 현황과 처리 상태</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="stat-card border-l-4 border-danger">
+            <div class="stat-label">Lv4 즉각위기</div>
+            <div id="crisisL4" class="stat-value text-danger">0</div>
+            <div class="text-xs text-muted mt-1">1시간 내 연락 의무</div>
+          </div>
+          <div class="stat-card border-l-4 border-warn">
+            <div class="stat-label">Lv3 고위험</div>
+            <div id="crisisL3" class="stat-value text-warn">0</div>
+            <div class="text-xs text-muted mt-1">24시간 내 연락</div>
+          </div>
+          <div class="stat-card border-l-4 border-yellow-400">
+            <div class="stat-label">Lv2 주의관찰</div>
+            <div id="crisisL2" class="stat-value text-yellow-700">0</div>
+            <div class="text-xs text-muted mt-1">모니터링 중</div>
+          </div>
+          <div class="stat-card border-l-4 border-gray-300">
+            <div class="stat-label">Lv1 약신호</div>
+            <div id="crisisL1" class="stat-value text-muted">0</div>
+            <div class="text-xs text-muted mt-1">로그 누적</div>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <h3 class="font-semibold mb-4">위기 로그</h3>
+          <div id="crisisList" class="space-y-3">
+            <div class="text-sm text-muted py-12 text-center">위기 신호 감지 시 여기에 표시됩니다.</div>
+          </div>
+        </div>
+
+        <div class="card p-5 bg-warn/5 border border-warn/30">
+          <div class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-warn flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <div>
+              <h4 class="font-semibold text-sm">법적 안내 — 청소년 위기 인지 시</h4>
+              <p class="text-xs text-muted mt-1 leading-relaxed">청소년복지법 / 자살예방법 / 아동학대 특례법에 따라 위기 청소년 인지 시 보호자 또는 관계기관에 통보 의무가 있습니다. 운영 시작 전 매뉴얼과 교역자 사전 교육이 필수입니다.</p>
+              <div class="mt-2 text-xs space-x-3">
+                <span class="chip">📞 1388 청소년상담</span>
+                <span class="chip">📞 1577-0199 자살예방</span>
+                <span class="chip">📞 112/119 즉각위험</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 메시지 로그 -->
+      <section id="section-logs" class="hidden space-y-6">
+        <div>
+          <h2 class="section-title">메시지 로그</h2>
+          <p class="section-subtitle">발송된 모든 메시지와 학생 응답 이력</p>
+        </div>
+
+        <div class="card overflow-hidden">
+          <table class="table w-full">
+            <thead class="bg-cream">
+              <tr>
+                <th>발송 시각</th>
+                <th>학생</th>
+                <th>유형</th>
+                <th>패턴</th>
+                <th>응답</th>
+                <th>분류</th>
+                <th>위기</th>
+              </tr>
+            </thead>
+            <tbody id="logTableBody">
+              <tr><td colspan="7" class="text-center py-12 text-muted text-sm">발송 이력이 없습니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- 행사 모달 -->
+<div id="eventModal" class="modal-overlay">
+  <div class="modal p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">새 행사 등록</h3>
+      <button onclick="closeModal('eventModal')" class="btn-ghost">✕</button>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="label">행사명 *</label>
+        <input id="evtName" type="text" class="input" placeholder="예: 2026 겨울수련회">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="label">시작일 *</label>
+          <input id="evtStart" type="date" class="input">
+        </div>
+        <div>
+          <label class="label">종료일</label>
+          <input id="evtEnd" type="date" class="input">
+        </div>
+      </div>
+      <div>
+        <label class="label">주제 *</label>
+        <input id="evtTheme" type="text" class="input" placeholder="예: 예배 회복, 다시 일어서기">
+      </div>
+      <div>
+        <label class="label">메시지 발송 기간</label>
+        <select id="evtDuration" class="select">
+          <option value="30">1개월</option>
+          <option value="90">3개월</option>
+          <option value="180" selected>6개월</option>
+          <option value="365">1년</option>
+        </select>
+      </div>
+      <div>
+        <label class="label">메모 (선택)</label>
+        <textarea id="evtNote" class="textarea" rows="2" placeholder="이번 수련회의 특이사항"></textarea>
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5">
+      <button onclick="closeModal('eventModal')" class="btn-secondary text-sm">취소</button>
+      <button onclick="saveEvent()" class="btn-primary text-sm">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 학생 모달 -->
+<div id="studentModal" class="modal-overlay">
+  <div class="modal p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">학생 추가</h3>
+      <button onclick="closeModal('studentModal')" class="btn-ghost">✕</button>
+    </div>
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="label">이름 *</label>
+          <input id="stuName" type="text" class="input">
+        </div>
+        <div>
+          <label class="label">학년 *</label>
+          <select id="stuGrade" class="select">
+            <option value="중1">중1</option>
+            <option value="중2">중2</option>
+            <option value="중3">중3</option>
+            <option value="고1" selected>고1</option>
+            <option value="고2">고2</option>
+            <option value="고3">고3</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="label">조</label>
+          <input id="stuTeam" type="text" class="input" placeholder="예: 3조">
+        </div>
+        <div>
+          <label class="label">생일 (선택)</label>
+          <input id="stuBirthday" type="date" class="input">
+        </div>
+      </div>
+      <div>
+        <label class="label">연락처 (카톡 채널 친구 추가용) *</label>
+        <input id="stuPhone" type="tel" class="input" placeholder="010-0000-0000">
+      </div>
+      <div>
+        <label class="label">개별 톤 설정 (선택)</label>
+        <select id="stuTone" class="select">
+          <option value="">— 기본 톤 사용 —</option>
+          <option value="warm">따뜻한 형/누나</option>
+          <option value="insta">인스타 유행 톤</option>
+          <option value="enfp">잔잔 ENFP</option>
+          <option value="dry">건조 (부담 0%)</option>
+        </select>
+      </div>
+      <div class="space-y-2 bg-cream rounded-lg p-3">
+        <div class="text-xs font-medium">동의 체크</div>
+        <label class="flex items-start gap-2 text-xs">
+          <input id="stuConsent1" type="checkbox" class="mt-0.5">
+          <span>학생 본인 동의</span>
+        </label>
+        <label class="flex items-start gap-2 text-xs">
+          <input id="stuConsent2" type="checkbox" class="mt-0.5">
+          <span>법정대리인(부모) 동의</span>
+        </label>
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5">
+      <button onclick="closeModal('studentModal')" class="btn-secondary text-sm">취소</button>
+      <button onclick="saveStudent()" class="btn-primary text-sm">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 결단 모달 -->
+<div id="decisionModal" class="modal-overlay">
+  <div class="modal p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">결단/나눔 기록</h3>
+      <button onclick="closeModal('decisionModal')" class="btn-ghost">✕</button>
+    </div>
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="label">학생 *</label>
+          <select id="decStudent" class="select">
+            <option value="">— 선택 —</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">행사 *</label>
+          <select id="decEvent" class="select">
+            <option value="">— 선택 —</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="label">결단 카테고리 *</label>
+        <select id="decCategory" class="select">
+          <option value="예배회복">예배회복</option>
+          <option value="관계">관계</option>
+          <option value="유혹">유혹</option>
+          <option value="진로">진로</option>
+          <option value="정체성">정체성</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div>
+        <label class="label">개인 결단 *</label>
+        <textarea id="decContent" class="textarea" rows="2" placeholder="예: 자기 전 핸드폰 대신 말씀 한 장"></textarea>
+      </div>
+      <div>
+        <label class="label">조별 나눔 요약</label>
+        <textarea id="decSharing" class="textarea" rows="2" placeholder="예: 밤에 유튜브 많이 봄. QT 꾸준히 하고 싶음"></textarea>
+      </div>
+      <div>
+        <label class="label">개인 고민 (선택)</label>
+        <textarea id="decConcern" class="textarea" rows="2" placeholder="예: 진로 불안, 친구 관계"></textarea>
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-5">
+      <button onclick="closeModal('decisionModal')" class="btn-secondary text-sm">취소</button>
+      <button onclick="saveDecision()" class="btn-primary text-sm">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 토스트 -->
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-ink text-white px-5 py-3 rounded-lg shadow-lg text-sm" style="display:none; z-index:100;"></div>
+
+<script>
+// ============================================
+// 상태 관리
+// ============================================
+const STORE = {
+  events: [],
+  students: [],
+  decisions: [],
+  messages: [],
+  crisis: [],
+  settings: {
+    tone: 'warm',
+    frequency: 'weekly2',
+    days: ['wed', 'fri'],
+    time: 'evening',
+    excludeStart: '20:00',
+    excludeEnd: '08:00',
+    duration: '180',
+    useA: true, useB: true, useC: true, useD: true,
+    receiveReply: true, practiceCheck: false, crisisDetect: true,
+  },
+};
+
+let calendarYear = 2026, calendarMonth = 4; // 0-indexed: 4 = 5월
+
+function load() {
+  try {
+    const data = localStorage.getItem('youth-care-app');
+    if (data) {
+      const parsed = JSON.parse(data);
+      Object.assign(STORE, parsed);
+    }
+  } catch(e) { console.warn('Load failed', e); }
+}
+
+function save() {
+  localStorage.setItem('youth-care-app', JSON.stringify(STORE));
+}
+
+// ============================================
+// 라우팅
+// ============================================
+const SECTION_TITLES = {
+  dashboard: '대시보드',
+  events: '행사 설정',
+  students: '학생 관리',
+  decisions: '결단/나눔 기록',
+  messages: '메시지 생성',
+  settings: '발송 설정',
+  calendar: '발송 캘린더',
+  crisis: '위기 모니터링',
+  logs: '메시지 로그',
+};
+
+function navigate(section) {
+  document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+  const target = document.getElementById('section-' + section);
+  if (target) target.classList.remove('hidden');
+
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`[data-section="${section}"]`)?.classList.add('active');
+
+  document.getElementById('topTitle').textContent = SECTION_TITLES[section] || section;
+
+  if (section === 'dashboard') renderDashboard();
+  if (section === 'events') renderEvents();
+  if (section === 'students') renderStudents();
+  if (section === 'decisions') renderDecisions();
+  if (section === 'messages') renderMessages();
+  if (section === 'settings') renderSettings();
+  if (section === 'calendar') renderCalendar();
+  if (section === 'crisis') renderCrisis();
+  if (section === 'logs') renderLogs();
+}
+
+document.querySelectorAll('.nav-item').forEach(n => {
+  n.addEventListener('click', e => {
+    e.preventDefault();
+    navigate(n.dataset.section);
+  });
+});
+
+// ============================================
+// 토스트 / 모달
+// ============================================
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 2200);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// ============================================
+// 행사 관리
+// ============================================
+function openEventModal() {
+  ['evtName','evtStart','evtEnd','evtTheme','evtNote'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('evtDuration').value = '180';
+  openModal('eventModal');
+}
+
+function saveEvent() {
+  const name = document.getElementById('evtName').value.trim();
+  const start = document.getElementById('evtStart').value;
+  const theme = document.getElementById('evtTheme').value.trim();
+  if (!name || !start || !theme) { toast('필수 항목을 입력해주세요'); return; }
+
+  STORE.events.push({
+    id: 'E' + Date.now(),
+    name,
+    start,
+    end: document.getElementById('evtEnd').value,
+    theme,
+    duration: document.getElementById('evtDuration').value,
+    note: document.getElementById('evtNote').value.trim(),
+  });
+  save();
+  closeModal('eventModal');
+  renderEvents();
+  toast('행사가 등록되었습니다');
+}
+
+function deleteEvent(id) {
+  if (!confirm('이 행사를 삭제할까요? 연결된 결단 기록은 유지됩니다.')) return;
+  STORE.events = STORE.events.filter(e => e.id !== id);
+  save();
+  renderEvents();
+}
+
+function renderEvents() {
+  const list = document.getElementById('eventList');
+  if (STORE.events.length === 0) {
+    list.innerHTML = `<div class="card p-12 text-center"><div class="text-muted text-sm">등록된 행사가 없습니다.</div><button onclick="openEventModal()" class="mt-4 btn-primary text-sm">첫 행사 등록하기</button></div>`;
+    return;
+  }
+  list.innerHTML = STORE.events.map(e => `
+    <div class="card p-5 flex items-start justify-between gap-4">
+      <div class="flex-1">
+        <div class="flex items-center gap-2 mb-1">
+          <h3 class="font-semibold">${escapeHtml(e.name)}</h3>
+          <span class="chip chip-sage">${escapeHtml(e.theme)}</span>
+        </div>
+        <div class="text-sm text-muted">${e.start}${e.end ? ' ~ ' + e.end : ''}  ·  발송 기간 ${e.duration}일</div>
+        ${e.note ? `<div class="text-xs text-muted mt-2">${escapeHtml(e.note)}</div>` : ''}
+      </div>
+      <button onclick="deleteEvent('${e.id}')" class="btn-ghost text-xs text-danger">삭제</button>
+    </div>
+  `).join('');
+}
+
+// ============================================
+// 학생 관리
+// ============================================
+function openStudentModal() {
+  ['stuName','stuTeam','stuBirthday','stuPhone'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('stuGrade').value = '고1';
+  document.getElementById('stuTone').value = '';
+  document.getElementById('stuConsent1').checked = false;
+  document.getElementById('stuConsent2').checked = false;
+  openModal('studentModal');
+}
+
+function saveStudent() {
+  const name = document.getElementById('stuName').value.trim();
+  const phone = document.getElementById('stuPhone').value.trim();
+  const consent1 = document.getElementById('stuConsent1').checked;
+  const consent2 = document.getElementById('stuConsent2').checked;
+  if (!name || !phone) { toast('이름과 연락처는 필수입니다'); return; }
+  if (!consent1 || !consent2) { toast('동의 항목 모두 체크 필요'); return; }
+
+  STORE.students.push({
+    id: 'S' + Date.now(),
+    name,
+    grade: document.getElementById('stuGrade').value,
+    team: document.getElementById('stuTeam').value.trim(),
+    birthday: document.getElementById('stuBirthday').value,
+    phone,
+    tone: document.getElementById('stuTone').value,
+    consent: true,
+    status: 'green',
+    joinedAt: new Date().toISOString(),
+  });
+  save();
+  closeModal('studentModal');
+  renderStudents();
+  refreshAllStudentSelects();
+  toast('학생이 추가되었습니다');
+}
+
+// 모든 학생 선택 드롭다운 동기화 (메시지 생성, 결단 모달 등)
+function refreshAllStudentSelects() {
+  const msgSel = document.getElementById('msgStudent');
+  if (msgSel) {
+    const cur = msgSel.value;
+    msgSel.innerHTML = '<option value="">— 학생을 선택하세요 —</option>' +
+      STORE.students.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${escapeHtml(s.grade)})</option>`).join('');
+    if (cur && STORE.students.find(s => s.id === cur)) msgSel.value = cur;
+  }
+  // 대시보드도 갱신
+  if (!document.getElementById('section-dashboard').classList.contains('hidden')) renderDashboard();
+}
+
+function deleteStudent(id) {
+  if (!confirm('이 학생을 삭제할까요? 관련 메시지/결단 데이터는 유지됩니다.')) return;
+  STORE.students = STORE.students.filter(s => s.id !== id);
+  save();
+  renderStudents();
+  refreshAllStudentSelects();
+}
+
+function renderStudents() {
+  const tbody = document.getElementById('studentTableBody');
+  if (STORE.students.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-muted text-sm">등록된 학생이 없습니다.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = STORE.students.map(s => {
+    const statusChip = {
+      green: '<span class="chip chip-sage">🟢 활발</span>',
+      yellow: '<span class="chip chip-warn">🟡 보통</span>',
+      red: '<span class="chip chip-danger">🔴 무응답</span>',
+    }[s.status || 'green'];
+    return `<tr>
+      <td class="font-medium">${escapeHtml(s.name)}</td>
+      <td>${escapeHtml(s.grade)}</td>
+      <td>${escapeHtml(s.team || '-')}</td>
+      <td class="text-muted text-xs">${escapeHtml(s.phone)}</td>
+      <td>${s.consent ? '<span class="chip chip-sage">완료</span>' : '<span class="chip chip-warn">대기</span>'}</td>
+      <td>${statusChip}</td>
+      <td class="text-right"><button onclick="deleteStudent('${s.id}')" class="btn-ghost text-xs text-danger">삭제</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================
+// 결단 관리
+// ============================================
+function openDecisionModal() {
+  if (STORE.students.length === 0) { toast('먼저 학생을 등록해주세요'); navigate('students'); return; }
+  if (STORE.events.length === 0) { toast('먼저 행사를 등록해주세요'); navigate('events'); return; }
+
+  const stu = document.getElementById('decStudent');
+  stu.innerHTML = '<option value="">— 선택 —</option>' + STORE.students.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${escapeHtml(s.grade)})</option>`).join('');
+  const evt = document.getElementById('decEvent');
+  evt.innerHTML = '<option value="">— 선택 —</option>' + STORE.events.map(e => `<option value="${e.id}">${escapeHtml(e.name)}</option>`).join('');
+
+  ['decContent','decSharing','decConcern'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('decCategory').value = '예배회복';
+  openModal('decisionModal');
+}
+
+function saveDecision() {
+  const studentId = document.getElementById('decStudent').value;
+  const eventId = document.getElementById('decEvent').value;
+  const content = document.getElementById('decContent').value.trim();
+  if (!studentId || !eventId || !content) { toast('필수 항목을 입력해주세요'); return; }
+
+  STORE.decisions.push({
+    id: 'D' + Date.now(),
+    studentId,
+    eventId,
+    category: document.getElementById('decCategory').value,
+    content,
+    sharing: document.getElementById('decSharing').value.trim(),
+    concern: document.getElementById('decConcern').value.trim(),
+    createdAt: new Date().toISOString(),
+  });
+  save();
+  closeModal('decisionModal');
+  renderDecisions();
+  toast('결단이 저장되었습니다');
+}
+
+function deleteDecision(id) {
+  if (!confirm('이 결단을 삭제할까요?')) return;
+  STORE.decisions = STORE.decisions.filter(d => d.id !== id);
+  save();
+  renderDecisions();
+}
+
+function renderDecisions() {
+  const tbody = document.getElementById('decisionTableBody');
+  if (STORE.decisions.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-12 text-muted text-sm">기록된 결단이 없습니다.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = STORE.decisions.map(d => {
+    const stu = STORE.students.find(s => s.id === d.studentId);
+    const evt = STORE.events.find(e => e.id === d.eventId);
+    return `<tr>
+      <td class="font-medium">${stu ? escapeHtml(stu.name) : '-'}</td>
+      <td class="text-xs">${evt ? escapeHtml(evt.name) : '-'}</td>
+      <td><span class="chip chip-sage">${escapeHtml(d.category)}</span></td>
+      <td class="text-sm">${escapeHtml(d.content)}</td>
+      <td class="text-xs text-muted">${escapeHtml(d.sharing || '-')}</td>
+      <td class="text-right"><button onclick="deleteDecision('${d.id}')" class="btn-ghost text-xs text-danger">삭제</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================
+// 메시지 생성 (템플릿 기반)
+// ============================================
+const TEMPLATES = {
+  // [type][tone][pattern] = function(student, decision, ctx) => message
+  A: {
+    warm: {
+      P1: (s, d) => `${s.name}아, 그때 "${d.content}" 결단했던 거 기억나지?\n못 지킨 날에도 하나님은 너 미워하지 않으셔.\n오늘 작은 한 걸음만, 그거면 충분해.`,
+      P2: (s, d) => `${s.name}아, 오늘 학교 어땠어?\n별일 없어도 그냥 안부 묻고 싶었어.\n자기 전에 한 번만 ${getCatAction(d.category)} ☺️`,
+      P3: (s, d) => `요즘 좀 지치지?\n지칠 때 잘하려고 더 애쓰지 마. 하나님이 너 끌고 가셔.\n오늘은 그냥 "주님, 저 좀 힘들어요" 한 줄이면 돼.`,
+      P4: (s, d) => `${s.name}아, 오늘 한 줄 — "괜찮아, 하나님이 같이 계셔."\n그게 전부야.`,
+      P5: (s, d) => `${s.name}아, 그때 "${d.content}" 결단한 거 기억해?\n그 결단 자체가 하나님이 너한테 주신 거야. 너 혼자 쥔 게 아니라.\n오늘 다시 시작해도 돼. 전혀 늦지 않았어.`,
+      P6: (s, d) => `${s.name}아, 식물도 매일 물 안 줘도 안 죽어. 며칠 까먹어도 살아.\n너의 결단도 똑같아. 못한 며칠에 너무 매이지 마.\n오늘 한 걸음이면 다시 살아나 🌱`,
+    },
+    insta: {
+      P1: (s, d) => `${s.name}아 ㅋㅋ 그때 결단한 거 "${d.content}" 그거 ㄹㅇ 럭키비키잖아~\n못한 날 있어도 하나님 진짜 너 미워 안 하심 ㅇㅈ?\n오늘은 한 번만 ㄱ?`,
+      P2: (s, d) => `${s.name}아 오늘 어땠음 ㅋㅋ\n별일 없으면 그냥 안부 ㄱㄱ\n자기 전에 한 번만 ㄱ? ☺️`,
+      P3: (s, d) => `요즘 진짜 현타 오지 ㅠ\n잘하려고 막 애쓰지 마. 하나님이 너 끌고 가심 ㄹㅇ.\n오늘은 그냥 "주님 저 힘듦요" 한 줄 ㄱㄱ`,
+      P4: (s, d) => `${s.name}아 오늘 한 줄 — 괜찮음. 하나님이 같이 계심.\n끝 ✨`,
+      P5: (s, d) => `${s.name}아 그때 "${d.content}" 결단한 거 ㄱㅇㄷ\n그 결단 너 혼자 쥔 거 아니야. 하나님이 주심.\n다시 ㄱㄱ해도 됨 진짜.`,
+      P6: (s, d) => `${s.name}아 식물도 매일 물 안 줘도 안 죽음 ㅇㅈ?\n너 결단도 똑같음. 며칠 까먹은 거에 매이지 마.\n오늘 한 걸음이면 ㄱㅇㄷ 🌱`,
+    },
+    enfp: {
+      P1: (s, d) => `${s.name}아아~ 그때 "${d.content}" 결단한 거 자꾸 생각나더라구 🥺\n못 지킨 날에도 하나님은 너 진짜진짜 미워 안 하셔!\n오늘 작은 한 걸음만, 응?? 💌`,
+      P2: (s, d) => `${s.name}아아 오늘 잘 지냈어??\n별일 없어도 그냥 안부 묻고 싶었어어\n자기 전에 살짝쿵 한 번만 ☺️`,
+      P3: (s, d) => `요즘 좀 지친 거 같아서... 🥺\n잘하려고 막 애쓰지 마앙. 하나님이 너 끌고 가셔!\n오늘은 그냥 "주님 저 힘들어요" 한 줄이면 돼애`,
+      P4: (s, d) => `${s.name}아 오늘 한 줄 ☺️\n"괜찮아, 하나님이 같이 계셔" 그게 다야아`,
+      P5: (s, d) => `${s.name}아 그때 "${d.content}" 결단한 거 기억해??\n그 결단 자체가 하나님 선물이야!! 너 혼자 쥔 게 아니라구\n다시 시작해도 돼애 절대 안 늦었어 💕`,
+      P6: (s, d) => `${s.name}아 식물도 매일 물 안 줘도 안 죽잖아아\n너 결단도 똑같애! 며칠 까먹은 거에 매이지 마앙\n오늘 한 걸음이면 다시 살아나 🌱✨`,
+    },
+    dry: {
+      P1: (s, d) => `${s.name}아.\n그때 결단 — "${d.content}".\n오늘 한 걸음. 그거면 됨.`,
+      P2: (s, d) => `${s.name}아.\n오늘 어땠어. 별일 없으면 한 줄.`,
+      P3: (s, d) => `지치지.\n잘하려고 애쓰지 마. 하나님이 끌고 가심.\n한 줄 기도. 끝.`,
+      P4: (s, d) => `${s.name}아. 한 줄.\n"하나님이 같이 계셔." 끝.`,
+      P5: (s, d) => `${s.name}아.\n그때 결단 — "${d.content}". 하나님이 주심.\n다시 시작해. 늦지 않음.`,
+      P6: (s, d) => `${s.name}아.\n식물도 며칠 물 안 줘도 안 죽음.\n너도 그래. 오늘 한 걸음.`,
+    },
+  },
+  B: {
+    warm: { default: (s, d) => `${s.name}아, ${getVerse(d.category).ref}.\n\n"${getVerse(d.category).text}"\n\n쉽게 풀면: ${getVerse(d.category).paraphrase}\n\n이 한 줄 들고 오늘 가보자.\n한 단어 골라봐 — 어떤 단어가 마음에 와?` },
+    insta: { default: (s, d) => `${s.name}아 ${getVerse(d.category).ref} ㄱㄱ\n\n"${getVerse(d.category).text}"\n\n쉽게: ${getVerse(d.category).paraphrase}\n\n오늘 이 한 줄. 단어 하나만 골라줘 — 뭐가 와닿음?` },
+    enfp: { default: (s, d) => `${s.name}아아 ${getVerse(d.category).ref} 봐봐!\n\n"${getVerse(d.category).text}"\n\n쉽게 풀면: ${getVerse(d.category).paraphrase}\n\n이 한 줄 들고 오늘 ㄱㄱ! 한 단어만 골라줘! 어떤 단어가 마음에 들어와?? 💌` },
+    dry: { default: (s, d) => `${s.name}아. ${getVerse(d.category).ref}.\n"${getVerse(d.category).text}"\n쉽게: ${getVerse(d.category).paraphrase}\n오늘 한 단어 골라봐.` },
+  },
+  C: {
+    warm: { default: (s, d) => `${s.name}아, 이번 2주 어땠어?\n어떻게 답해도 괜찮아.\n\n1) 잘 가고 있어 🌱\n2) 그럭저럭, 들쑥날쑥\n3) 좀 어려웠어\n4) 솔직히 멀어진 느낌\n5) 잘 모르겠어\n\n숫자만 답장해줘.` },
+    insta: { default: (s, d) => `${s.name}아 이번 2주 어땠음? ㅋㅋ\n뭐로 답해도 ㄱㅊ\n\n1) 잘 가는 중 🌱\n2) 그럭저럭, 들쑥날쑥\n3) 좀 어려웠음\n4) 솔직히 멀어진 느낌\n5) 모르겠음 ㅋㅋ\n\n숫자만 ㄱ` },
+    enfp: { default: (s, d) => `${s.name}아아 이번 2주 어땠어??\n뭐로 답해도 진짜 괜찮아아 🥺\n\n1) 잘 가고 있어어 🌱\n2) 그럭저럭~\n3) 좀 어려웠어어\n4) 솔직히 멀어진 느낌이야아\n5) 잘 모르겠어어\n\n숫자만 답장해줘 응?? ☺️` },
+    dry: { default: (s, d) => `${s.name}아. 이번 2주 어땠어.\n\n1) 잘\n2) 그럭저럭\n3) 어려웠어\n4) 멀어짐\n5) 모름\n\n숫자만.` },
+  },
+  D: {
+    warm: { default: (s, d) => `${s.name}아, 시험 주간이지.\n잘 보는 것보다 신실하게 준비하는 네가 더 멋져.\n결과는 하나님께 맡기고, 너는 너 할 일에 집중해.\n주님이 같이 시험 보고 계셔 ✏️` },
+    insta: { default: (s, d) => `${s.name}아 시험 주간이지 ㅠㅠ\n결과보다 준비하는 너가 ㄹㅇ 멋짐.\n결과는 하나님께 맡기고 너는 너 할 일 ㄱㄱ.\n주님이 같이 시험 보심 ✏️` },
+    enfp: { default: (s, d) => `${s.name}아아 시험 주간이네 🥺\n결과보다 신실하게 준비하는 너가 진짜진짜 멋져!!\n결과는 하나님께 맡기고 너는 네 할 일에 집중해 응??\n주님이 같이 시험 보고 계셔어 ✏️💌` },
+    dry: { default: (s, d) => `${s.name}아.\n시험. 신실하게 준비. 결과는 하나님.\n할 일에 집중. 끝.` },
+  },
+};
+
+const VERSES = {
+  예배회복: [
+    { ref: '시편 63:1', text: '하나님이여 주는 나의 하나님이시라 내가 간절히 주를 찾되', paraphrase: '하나님, 진짜 내 하나님이세요. 정말 간절히 당신을 찾고 있어요.' },
+    { ref: '시편 23:1', text: '여호와는 나의 목자시니 내게 부족함이 없으리로다', paraphrase: '하나님이 내 목자야. 그래서 부족함이 없어.' },
+    { ref: '시편 42:1', text: '하나님이여 사슴이 시냇물을 찾기에 갈급함 같이 내 영혼이 주를 찾기에 갈급하니이다', paraphrase: '하나님, 사슴이 물 찾듯 제 영혼이 당신을 찾고 있어요.' },
+  ],
+  관계: [
+    { ref: '골로새서 3:13', text: '서로 용납하여 피차 용서하되 주께서 너희를 용서하신 것 같이', paraphrase: '서로 받아주고 용서하자. 주님이 우릴 용서해주신 것처럼.' },
+    { ref: '에베소서 4:32', text: '서로 친절하게 하며 불쌍히 여기며 서로 용서하기를', paraphrase: '서로 친절히, 불쌍히 여기며, 용서하면서 살자.' },
+  ],
+  유혹: [
+    { ref: '고린도전서 10:13', text: '오직 미쁘신 하나님이 ... 감당하지 못할 시험 당함을 허락하지 아니하시고', paraphrase: '하나님은 네가 못 견딜 시험은 안 주셔. 피할 길도 같이 주셔.' },
+    { ref: '시편 119:9', text: '청년이 무엇으로 그의 행실을 깨끗하게 하리이까 주의 말씀만 지킬 따름이니이다', paraphrase: '내가 어떻게 깨끗하게 살까? 당신 말씀 따라가는 거.' },
+  ],
+  진로: [
+    { ref: '잠언 16:9', text: '사람이 마음으로 자기의 길을 계획할지라도 그의 걸음을 인도하시는 이는 여호와시니라', paraphrase: '계획은 네가 세워. 근데 걸음 인도하시는 건 하나님이야.' },
+    { ref: '잠언 3:5-6', text: '너는 마음을 다하여 여호와를 신뢰하고 네 명철을 의지하지 말라', paraphrase: '마음 다해 하나님 믿어. 네 머리만 믿지 말고.' },
+  ],
+  정체성: [
+    { ref: '시편 139:14', text: '내가 주께 감사하옴은 나를 지으심이 심히 기묘하심이라', paraphrase: '하나님이 나를 만드신 게 진짜 신비로워. 감사해요.' },
+    { ref: '에베소서 1:4', text: '곧 창세 전에 그리스도 안에서 우리를 택하사', paraphrase: '세상이 만들어지기도 전에 하나님이 우리를 택하셨어.' },
+  ],
+  기타: [
+    { ref: '시편 34:18', text: '여호와는 마음이 상한 자를 가까이 하시고 충심으로 통회하는 자를 구원하시는도다', paraphrase: '마음 상한 사람 옆에 하나님이 가까이 계셔.' },
+  ],
+};
+
+function getVerse(category) {
+  const arr = VERSES[category] || VERSES.기타;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function getCatAction(category) {
+  return ({
+    예배회복: '말씀 한 절',
+    관계: '한 명한테 안부',
+    유혹: '한 줄 기도',
+    진로: '한 줄 기도',
+    정체성: '"하나님, 저 만드셔서 감사해요" 한 줄',
+    기타: '한 줄 기도',
+  })[category] || '한 줄 기도';
+}
+
+function generateMessage(student, decision, type, tone, pattern) {
+  if (!student) return '학생 정보가 필요합니다.';
+  if (!decision) decision = { content: '수련회 결단', category: '기타' };
+
+  const templates = TEMPLATES[type]?.[tone];
+  if (!templates) return '템플릿이 정의되지 않았습니다.';
+
+  if (type === 'A') {
+    return templates[pattern || 'P1'](student, decision);
+  }
+  return templates.default(student, decision);
+}
+
+function renderMessages() {
+  const sel = document.getElementById('msgStudent');
+  sel.innerHTML = '<option value="">— 학생을 선택하세요 —</option>' +
+    STORE.students.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${escapeHtml(s.grade)})</option>`).join('');
+  generatePreview();
+}
+
+function generatePreview() {
+  const studentId = document.getElementById('msgStudent').value;
+  const type = document.getElementById('msgType').value;
+  const tone = document.getElementById('msgTone').value;
+  const pattern = document.getElementById('msgPattern').value;
+
+  const patternRow = document.getElementById('msgPattern').closest('div');
+  if (patternRow) patternRow.style.display = (type === 'A') ? '' : 'none';
+
+  const previewEl = document.getElementById('msgPreview');
+  const metaEl = document.getElementById('msgMeta');
+  const analysisEl = document.getElementById('msgAnalysis');
+  const compareEl = document.getElementById('toneComparison');
+
+  if (!studentId) {
+    previewEl.textContent = '학생을 선택해주세요.';
+    metaEl.textContent = '';
+    analysisEl.innerHTML = '<div class="text-muted text-xs py-12 text-center">학생 선택 시 분석 정보가 표시됩니다.</div>';
+    compareEl.innerHTML = '<div class="text-muted text-xs col-span-4 py-8 text-center">학생 선택 시 4가지 톤 메시지가 동시에 표시됩니다.</div>';
+    return;
+  }
+
+  const student = STORE.students.find(s => s.id === studentId);
+  const decision = STORE.decisions.find(d => d.studentId === studentId);
+  const msg = generateMessage(student, decision, type, tone, pattern);
+
+  previewEl.textContent = msg;
+  metaEl.innerHTML = `
+    <span class="chip">${type}형</span>
+    <span class="chip">${({warm:'따뜻한', insta:'인스타', enfp:'잔잔ENFP', dry:'건조'})[tone]}</span>
+    ${type === 'A' ? `<span class="chip">${pattern}</span>` : ''}
+    <span class="chip">${msg.length}자</span>
+  `;
+
+  analysisEl.innerHTML = `
+    <div>
+      <div class="text-xs text-muted">학생</div>
+      <div class="font-medium">${escapeHtml(student.name)} · ${escapeHtml(student.grade)}${student.team ? ' · ' + escapeHtml(student.team) : ''}</div>
+    </div>
+    ${decision ? `
+    <div>
+      <div class="text-xs text-muted">참고된 결단</div>
+      <div class="text-sm">${escapeHtml(decision.content)}</div>
+      <span class="chip chip-sage mt-1">${escapeHtml(decision.category)}</span>
+    </div>` : '<div class="text-xs text-warn">⚠️ 결단 정보 없음. 결단을 먼저 등록하면 더 개인화된 메시지가 생성됩니다.</div>'}
+    <div>
+      <div class="text-xs text-muted">자동 검열</div>
+      <div class="space-y-1 mt-1">
+        <div class="flex items-center gap-2 text-xs">${msg.includes('습니다') ? '<span class="chip chip-danger">습니다체 감지</span>' : '<span class="chip chip-sage">✓ 습니다체 없음</span>'}</div>
+        <div class="flex items-center gap-2 text-xs">${msg.length > 200 ? '<span class="chip chip-warn">길이 초과</span>' : '<span class="chip chip-sage">✓ 길이 적정</span>'}</div>
+        <div class="flex items-center gap-2 text-xs"><span class="chip chip-sage">✓ 비속어 없음</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="text-xs text-muted">예상 발송 시간</div>
+      <div class="text-sm">19:00 (저녁 발송 기본 설정)</div>
+    </div>
+  `;
+
+  compareEl.innerHTML = ['warm','insta','enfp','dry'].map(t => {
+    const m = generateMessage(student, decision, type, t, pattern);
+    return `
+      <div class="bg-cream rounded-lg p-3">
+        <div class="text-xs font-medium mb-2">${({warm:'따뜻한', insta:'인스타', enfp:'잔잔ENFP', dry:'건조'})[t]}</div>
+        <div class="message-bubble kakao text-xs whitespace-pre-wrap" style="max-width:none;">${escapeHtml(m)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================
+// 발송 설정
+// ============================================
+function renderSettings() {
+  const cfg = STORE.settings;
+  document.getElementById('cfgTone').value = cfg.tone;
+  document.getElementById('cfgFrequency').value = cfg.frequency;
+  document.getElementById('cfgTime').value = cfg.time;
+  document.getElementById('cfgExcludeStart').value = cfg.excludeStart;
+  document.getElementById('cfgExcludeEnd').value = cfg.excludeEnd;
+  document.getElementById('cfgDuration').value = cfg.duration;
+
+  document.querySelectorAll('.cfg-day').forEach(cb => {
+    cb.checked = cfg.days.includes(cb.dataset.day);
+    cb.onchange = saveSettings;
+  });
+
+  document.querySelectorAll('[data-toggle]').forEach(el => {
+    const key = el.dataset.toggle;
+    if (cfg[key]) el.classList.add('on'); else el.classList.remove('on');
+  });
+}
+
+function toggleSetting(el) {
+  el.classList.toggle('on');
+  saveSettings();
+}
+
+function saveSettings() {
+  STORE.settings.tone = document.getElementById('cfgTone').value;
+  STORE.settings.frequency = document.getElementById('cfgFrequency').value;
+  STORE.settings.time = document.getElementById('cfgTime').value;
+  STORE.settings.excludeStart = document.getElementById('cfgExcludeStart').value;
+  STORE.settings.excludeEnd = document.getElementById('cfgExcludeEnd').value;
+  STORE.settings.duration = document.getElementById('cfgDuration').value;
+  STORE.settings.days = Array.from(document.querySelectorAll('.cfg-day:checked')).map(cb => cb.dataset.day);
+  document.querySelectorAll('[data-toggle]').forEach(el => {
+    STORE.settings[el.dataset.toggle] = el.classList.contains('on');
+  });
+  save();
+  toast('설정 저장됨');
+}
+
+// ============================================
+// 캘린더
+// ============================================
+const KOREAN_MONTH = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const SAMPLE_EVENTS = {
+  '2026-01-01': { type: 'liturgical', label: '신년' },
+  '2026-02-17': { type: 'liturgical', label: '설날' },
+  '2026-02-18': { type: 'liturgical', label: '사순절 시작' },
+  '2026-04-05': { type: 'liturgical', label: '부활절' },
+  '2026-05-08': { type: 'liturgical', label: '어버이날' },
+  '2026-05-15': { type: 'liturgical', label: '스승의 날' },
+  '2026-05-24': { type: 'liturgical', label: '성령강림' },
+  '2026-04-28': { type: 'school', label: '1학기 중간고사' },
+  '2026-06-30': { type: 'school', label: '1학기 기말' },
+  '2026-10-30': { type: 'school', label: '2학기 중간' },
+  '2026-11-19': { type: 'school', label: '수능 (고3)' },
+  '2026-11-15': { type: 'liturgical', label: '추수감사' },
+  '2026-12-25': { type: 'liturgical', label: '성탄절' },
+};
+
+function changeMonth(delta) {
+  calendarMonth += delta;
+  if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
+  if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  document.getElementById('currentMonth').textContent = `${calendarYear}년 ${KOREAN_MONTH[calendarMonth]}`;
+  const first = new Date(calendarYear, calendarMonth, 1);
+  const last = new Date(calendarYear, calendarMonth + 1, 0);
+  const startDay = first.getDay();
+  const grid = document.getElementById('calendarGrid');
+  let html = '';
+
+  for (let i = 0; i < startDay; i++) html += `<div></div>`;
+
+  const today = new Date();
+  for (let d = 1; d <= last.getDate(); d++) {
+    const date = `${calendarYear}-${String(calendarMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evt = SAMPLE_EVENTS[date];
+    const isToday = (today.getFullYear()===calendarYear && today.getMonth()===calendarMonth && today.getDate()===d);
+
+    let classes = 'calendar-day';
+    if (isToday) classes += ' today';
+    if (evt) classes += ' event';
+
+    let evtBadge = '';
+    if (evt) {
+      const colorMap = {
+        liturgical: 'bg-sage/20 text-sageDark border border-sage',
+        school: 'bg-warn/20 text-warn border border-warn',
+        retreat: 'bg-blue-100 text-blue-700 border border-blue-400',
+        personal: 'bg-pink-100 text-pink-700 border border-pink-400',
+      };
+      evtBadge = `<div class="mt-1 text-[10px] px-1 py-0.5 rounded ${colorMap[evt.type]}">${evt.label}</div>`;
+    }
+
+    html += `<div class="${classes}">
+      <div class="text-xs font-medium ${isToday ? 'text-sage font-bold' : ''}">${d}</div>
+      ${evtBadge}
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+// ============================================
+// 위기 모니터링
+// ============================================
+function renderCrisis() {
+  const counts = { L1: 0, L2: 0, L3: 0, L4: 0 };
+  STORE.crisis.forEach(c => { counts['L' + c.level] = (counts['L' + c.level] || 0) + 1; });
+  document.getElementById('crisisL1').textContent = counts.L1;
+  document.getElementById('crisisL2').textContent = counts.L2;
+  document.getElementById('crisisL3').textContent = counts.L3;
+  document.getElementById('crisisL4').textContent = counts.L4;
+
+  const list = document.getElementById('crisisList');
+  if (STORE.crisis.length === 0) {
+    list.innerHTML = '<div class="text-sm text-muted py-12 text-center">위기 신호 감지 시 여기에 표시됩니다.</div>';
+    return;
+  }
+
+  list.innerHTML = STORE.crisis.map(c => {
+    const stu = STORE.students.find(s => s.id === c.studentId);
+    const levelStyle = { 4: 'border-danger bg-danger/5', 3: 'border-warn bg-warn/5', 2: 'border-yellow-400 bg-yellow-50', 1: 'border-gray-300 bg-gray-50' }[c.level];
+    const levelLabel = { 4: 'Lv4 즉각위기', 3: 'Lv3 고위험', 2: 'Lv2 주의관찰', 1: 'Lv1 약신호' }[c.level];
+
+    return `<div class="border-l-4 rounded-lg p-4 ${levelStyle}">
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-semibold">${stu ? escapeHtml(stu.name) : '?'}</span>
+            <span class="chip">${levelLabel}</span>
+            ${c.level >= 3 ? '<span class="pulse-dot"></span>' : ''}
+          </div>
+          <div class="text-xs text-muted mt-1">${c.detectedAt}</div>
+          <div class="text-sm mt-2 italic">"${escapeHtml(c.message)}"</div>
+          <div class="text-xs text-muted mt-2">분류 신뢰도: ${c.confidence}%</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <span class="chip ${c.status === 'resolved' ? 'chip-sage' : 'chip-warn'}">${c.status === 'resolved' ? '해결됨' : '대기중'}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================
+// 메시지 로그
+// ============================================
+function renderLogs() {
+  const tbody = document.getElementById('logTableBody');
+  if (STORE.messages.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-muted text-sm">발송 이력이 없습니다.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = STORE.messages.map(m => {
+    const stu = STORE.students.find(s => s.id === m.studentId);
+    return `<tr>
+      <td class="text-xs">${m.sentAt}</td>
+      <td class="font-medium">${stu ? escapeHtml(stu.name) : '?'}</td>
+      <td><span class="chip">${m.type}형</span></td>
+      <td class="text-xs">${m.pattern || '-'}</td>
+      <td class="text-xs">${m.response ? escapeHtml(m.response) : '<span class="text-muted">무응답</span>'}</td>
+      <td class="text-xs">${m.classification || '-'}</td>
+      <td>${m.crisis ? '<span class="chip chip-danger">위기</span>' : '<span class="text-muted">-</span>'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================
+// 대시보드
+// ============================================
+function renderDashboard() {
+  document.getElementById('statStudents').textContent = STORE.students.filter(s => s.consent).length;
+  document.getElementById('statDecisions').textContent = STORE.decisions.length;
+
+  const thisWeekCount = STORE.messages.filter(m => {
+    const d = new Date(m.sentAt);
+    const now = new Date();
+    const diff = (now - d) / (1000 * 60 * 60 * 24);
+    return diff < 7 && diff >= 0;
+  }).length;
+  document.getElementById('statMessages').textContent = thisWeekCount;
+  document.getElementById('statCrisis').textContent = STORE.crisis.filter(c => c.status !== 'resolved').length;
+
+  const today = new Date();
+  document.getElementById('todayDate').textContent = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
+
+  const todayPlan = document.getElementById('todayPlanList');
+  if (STORE.students.length === 0) {
+    todayPlan.innerHTML = '<div class="text-sm text-muted py-8 text-center">아직 학생 정보가 없어요. 좌측 메뉴에서 학생을 등록해보세요.</div>';
+  } else {
+    const dayMap = { 0:'sun',1:'mon',2:'tue',3:'wed',4:'thu',5:'fri',6:'sat' };
+    const todayDay = dayMap[today.getDay()];
+    if (STORE.settings.days.includes(todayDay)) {
+      todayPlan.innerHTML = STORE.students.filter(s => s.consent).slice(0, 5).map(s => `
+        <div class="flex items-center gap-3 py-2 border-b border-soft last:border-0">
+          <div class="w-8 h-8 rounded-full bg-sage/20 flex items-center justify-center text-sage text-xs font-bold">${escapeHtml(s.name[0])}</div>
+          <div class="flex-1">
+            <div class="text-sm font-medium">${escapeHtml(s.name)}</div>
+            <div class="text-xs text-muted">19:00 · A형 메시지 예정</div>
+          </div>
+          <span class="chip chip-sage">대기</span>
+        </div>
+      `).join('') + (STORE.students.length > 5 ? `<div class="text-xs text-muted text-center pt-2">+${STORE.students.length - 5}명 더</div>` : '');
+    } else {
+      todayPlan.innerHTML = '<div class="text-sm text-muted py-8 text-center">오늘은 발송 예정일이 아닙니다.<br/><span class="text-xs">발송 요일은 [발송 설정]에서 변경 가능</span></div>';
+    }
+  }
+
+  const signalList = document.getElementById('signalList');
+  if (STORE.students.length === 0) {
+    signalList.innerHTML = '<div class="text-sm text-muted py-8 text-center">학생 등록 후 자동 집계됩니다.</div>';
+  } else {
+    const counts = { green: 0, yellow: 0, red: 0 };
+    STORE.students.forEach(s => counts[s.status || 'green']++);
+    signalList.innerHTML = `
+      <div class="flex items-center justify-between py-2">
+        <div class="flex items-center gap-2"><span>🟢</span><span class="text-sm">활발 (응답률 60%+)</span></div>
+        <div class="font-semibold">${counts.green}명</div>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <div class="flex items-center gap-2"><span>🟡</span><span class="text-sm">보통 (응답률 30~60%)</span></div>
+        <div class="font-semibold">${counts.yellow}명</div>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <div class="flex items-center gap-2"><span>🔴</span><span class="text-sm">무응답 (2주+)</span></div>
+        <div class="font-semibold">${counts.red}명</div>
+      </div>
+    `;
+  }
+
+  const recent = document.getElementById('recentActivity');
+  const allEvents = [
+    ...STORE.messages.map(m => ({ ...m, kind: 'message' })),
+    ...STORE.crisis.map(c => ({ ...c, kind: 'crisis' })),
+  ].sort((a, b) => new Date(b.sentAt || b.detectedAt) - new Date(a.sentAt || a.detectedAt)).slice(0, 5);
+
+  if (allEvents.length === 0) {
+    recent.innerHTML = '<div class="text-sm text-muted py-4">활동 내역이 없습니다.</div>';
+  } else {
+    recent.innerHTML = allEvents.map(e => {
+      const stu = STORE.students.find(s => s.id === e.studentId);
+      if (e.kind === 'message') {
+        return `<div class="flex items-center gap-3 py-2 text-sm">
+          <span class="chip chip-sage">${e.type}형 발송</span>
+          <span>${stu ? escapeHtml(stu.name) : '?'}</span>
+          <span class="text-xs text-muted ml-auto">${e.sentAt}</span>
+        </div>`;
+      } else {
+        return `<div class="flex items-center gap-3 py-2 text-sm">
+          <span class="chip chip-danger">위기 Lv${e.level}</span>
+          <span>${stu ? escapeHtml(stu.name) : '?'}</span>
+          <span class="text-xs text-muted ml-auto">${e.detectedAt}</span>
+        </div>`;
+      }
+    }).join('');
+  }
+
+  // 위기 배지
+  const crisisBadge = document.getElementById('crisisBadge');
+  const pendingCrisis = STORE.crisis.filter(c => c.status !== 'resolved').length;
+  if (pendingCrisis > 0) {
+    crisisBadge.textContent = pendingCrisis;
+    crisisBadge.style.display = '';
+  } else {
+    crisisBadge.style.display = 'none';
+  }
+}
+
+// ============================================
+// 샘플 데이터
+// ============================================
+function loadSampleData() {
+  if (!confirm('샘플 데이터를 로드할까요? 기존 데이터에 추가됩니다.')) return;
+
+  const now = Date.now();
+  const eventId = 'E' + now;
+  STORE.events.push({
+    id: eventId,
+    name: '2026 겨울수련회',
+    start: '2026-01-10',
+    end: '2026-01-12',
+    theme: '예배 회복',
+    duration: '180',
+    note: '청소년부 35명 참가',
+  });
+
+  const sampleStudents = [
+    { name: '김민준', grade: '고1', team: '3조', tone: 'warm', cat: '예배회복', content: '자기 전 핸드폰 대신 말씀 한 장', sharing: '밤에 유튜브 많이 봄. QT 꾸준히 하고 싶음', concern: '집중력' },
+    { name: '이서연', grade: '중3', team: '2조', tone: 'enfp', cat: '관계', content: '친구한테 먼저 사과하기', sharing: '자존심 때문에 사과 못함', concern: '친구 관계, 외로움' },
+    { name: '박지호', grade: '고2', team: '1조', tone: 'warm', cat: '진로', content: '입시 스트레스 속에서 주일예배 빠지지 않기', sharing: '학원 때문에 예배 못 갈 때 죄책감', concern: '진로, 학원' },
+    { name: '최예진', grade: '중2', team: '4조', tone: 'enfp', cat: '정체성', content: '나를 비교하지 않기', sharing: '인스타 보면서 자존감 떨어짐', concern: 'SNS 비교' },
+    { name: '정도윤', grade: '고3', team: '1조', tone: 'dry', cat: '진로', content: '수능 끝까지 신실하게', sharing: '결과에 대한 두려움', concern: '수능, 진로' },
+  ];
+
+  sampleStudents.forEach((s, i) => {
+    const sid = 'S' + (now + i + 1);
+    STORE.students.push({
+      id: sid,
+      name: s.name,
+      grade: s.grade,
+      team: s.team,
+      birthday: '',
+      phone: `010-1234-${1000 + i}`,
+      tone: s.tone,
+      consent: true,
+      status: i === 4 ? 'red' : i === 1 ? 'yellow' : 'green',
+      joinedAt: new Date().toISOString(),
+    });
+    STORE.decisions.push({
+      id: 'D' + (now + i + 100),
+      studentId: sid,
+      eventId,
+      category: s.cat,
+      content: s.content,
+      sharing: s.sharing,
+      concern: s.concern,
+      createdAt: new Date().toISOString(),
+    });
+  });
+
+  // 샘플 메시지 로그
+  const today = new Date();
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(today.getTime() - i * 24 * 60 * 60 * 1000);
+    const stu = STORE.students[Math.floor(Math.random() * STORE.students.length)];
+    STORE.messages.push({
+      id: 'M' + (now + i + 1000),
+      studentId: stu.id,
+      sentAt: d.toISOString().split('T')[0] + ' 19:00',
+      type: ['A','A','A','B','C','D'][Math.floor(Math.random() * 6)],
+      pattern: ['P1','P2','P3','P1','P4'][Math.floor(Math.random() * 5)],
+      response: Math.random() > 0.4 ? ['고마워요', '3', '잘하고 있어', '힘들어'][Math.floor(Math.random() * 4)] : '',
+      classification: '긍정',
+      crisis: false,
+    });
+  }
+
+  // 샘플 위기 신호
+  STORE.crisis.push({
+    id: 'C' + now,
+    studentId: STORE.students[1].id,
+    level: 2,
+    message: '요즘 진짜 외로워 ㅠㅠ',
+    detectedAt: new Date().toISOString().split('T')[0] + ' 14:32',
+    confidence: 78,
+    status: 'pending',
+  });
+  STORE.crisis.push({
+    id: 'C' + (now + 1),
+    studentId: STORE.students[4].id,
+    level: 3,
+    message: '다 망했어 의미 없어',
+    detectedAt: new Date(today.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + ' 22:15',
+    confidence: 92,
+    status: 'resolved',
+  });
+
+  save();
+  toast('샘플 데이터 로드 완료');
+  navigate('dashboard');
+}
+
+function exportData() {
+  const data = JSON.stringify(STORE, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `youth-care-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('백업 파일이 다운로드되었습니다');
+}
+
+function confirmReset() {
+  if (!confirm('정말 모든 데이터를 초기화할까요? 복구 불가능합니다.')) return;
+  if (!confirm('정말로요? 마지막 확인입니다.')) return;
+  localStorage.removeItem('youth-care-app');
+  location.reload();
+}
+
+// ============================================
+// 유틸
+// ============================================
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+// ============================================
+// 초기화
+// ============================================
+load();
+const todayStr = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+document.getElementById('topDate').textContent = todayStr;
+navigate('dashboard');
+</script>
+
+</body>
+</html>
